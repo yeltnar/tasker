@@ -1,1 +1,1 @@
-falshLong('test123')
+falsh('test123');

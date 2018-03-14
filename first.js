@@ -1,5 +1,5 @@
 function go(){
-  falsh('test123');
+  flash('test123');
   exit();
 }
 

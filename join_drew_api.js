@@ -8,5 +8,5 @@ if( action === "performTask" ){
   flashLong("taskName "+taskName+" performTask "+performTask);
   performTask(taskName,5);
 }else{
-  flash("performTask "+performTask);
+  flash("didn't match: action "+action);
 }

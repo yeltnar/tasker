@@ -1,1 +1,3 @@
-flashLong("You have got the file");
+//flashLong("You have got the file");
+
+flashLong(data);

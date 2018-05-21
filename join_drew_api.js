@@ -12,6 +12,7 @@ try{
 
   }
   else if(action === "updateScript"){
+    flashLong("updating script");
     deleteFile( "Tasker/join_drew_api.js", 0, false );
     performTask("Join Command Here",5);
   }else{

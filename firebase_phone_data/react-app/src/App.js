@@ -167,7 +167,6 @@ function getShortId(long_id){
     short_id = long_id.split("").reduce((acc,cur,i,arr)=>{
       if(i<MAX_LENGTH){
         acc = acc+cur;
-        console.log(i)
       }
       return acc
     },"");

@@ -46,8 +46,10 @@ async function sendUpdateState(notification_id, notification_obj) {
 
     const person_id = getDataValue("person_id");
     const token = getDataValue("token");
+
+    delete notification_obj.from_share;
     
-    const value = JSON.stringify(notification_obj);
+    const value = encodeURIComponent(JSON.stringify(notification_obj));
 
     var requestOptions = {
         method: 'POST',

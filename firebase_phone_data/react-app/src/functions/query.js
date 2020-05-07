@@ -83,7 +83,8 @@ function replaceQValue(q_term = "q", replace_value = "") {
 }
 
 function getDataValue(key) {
-    const value = getQValue(key) || localStorage.getItem(key);
+    let value = getQValue(key) 
+    value = value===undefined||value===null ? localStorage.getItem(`_app_data_${key}`) : value;
     localStorage.setItem(`_app_data_${key}`, value);
     return value;
 }

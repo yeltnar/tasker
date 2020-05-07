@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
 import {getPhoneJsonAction,updateNotificationValue,submitNotificationUpdate,deleteNotification,addNotification} from "./redux/store"
@@ -146,7 +145,9 @@ function NotificationElement(props){
 
 function AddNotificationButton(){
   const dispatch = useDispatch();
-  return (<div className="add_notification_button"><button onClick={addButtonClick}>Add Notification</button></div>)
+  return (<div className="add_notification_button">
+    <button onClick={addButtonClick}>Add Notification</button>
+    </div>)
   function addButtonClick(){
     dispatch(addNotification());
   }

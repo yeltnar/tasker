@@ -10,11 +10,6 @@
     justify-content: space-between;
 }
 
-.add_notification_button{
-    /* background-color: #6273a0; */
-    margin-top:.5rem;
-}
-
 .notification_element{
     padding-right:1rem;
 }
@@ -31,6 +26,11 @@
     margin:.5rem;
     background:#2149b3;
     color: #f9f8f8;
+  }
+
+  .add_notification_button{
+      /* background-color: #6273a0; */
+    margin:.5rem;
   }
 
   .edit_holder{

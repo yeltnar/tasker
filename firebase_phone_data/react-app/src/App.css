@@ -1,0 +1,34 @@
+.notifications{
+    display:flex;
+    flex-wrap:wrap;
+    padding:.5rem;
+  }
+
+.top_notification_container{
+    display:flex;
+    justify-content: space-between;
+}
+
+.add_notification_button{
+    /* background-color: #6273a0; */
+    margin-top:.5rem;
+}
+
+.notification_element{
+    padding:.5rem;
+}
+
+.notification_element_holder{
+    padding:.5rem;
+    margin:.5rem;
+    background:#6273a0;
+  }
+
+  .edit_holder{
+    display:flex;
+  }
+
+  .submit_button{
+    background-color: white;
+    transition: background-color 0.1s linear;
+  }

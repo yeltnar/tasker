@@ -99,7 +99,7 @@ function NotificationElementHolder(props){
   return (
     <div className="notification_element_holder">
       <div className="top_notification_container">
-        <div>{single_notification_obj.title}  [{notification_id}]</div>
+        <div>{single_notification_obj.title}  [{getShortId(notification_id)}]</div>
         <div><button onClick={deleteClick}>X</button></div>
       </div>
       <div>
@@ -150,6 +150,29 @@ function AddNotificationButton(){
   function addButtonClick(){
     dispatch(addNotification());
   }
+}
+
+function getShortId(long_id){
+
+  let short_id=""
+  const MAX_LENGTH=8;
+  
+  if( long_id.length>MAX_LENGTH ){
+    debugger
+
+    short_id = long_id.split("").reduce((acc,cur,i,arr)=>{
+      if(i<MAX_LENGTH){
+        acc = acc+cur;
+        console.log(i)
+      }
+      return acc
+    },"");
+
+  }else{
+    short_id=long_id;
+  }
+
+  return short_id
 }
 
 export default AppWrapper;

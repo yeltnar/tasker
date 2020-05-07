@@ -1,7 +1,8 @@
 .notifications{
     display:flex;
     flex-wrap:wrap;
-    padding:.5rem;
+    --app_padding:.5rem;
+    padding:var(--app_padding);
   }
 
 .top_notification_container{
@@ -15,10 +16,11 @@
 }
 
 .notification_element{
-    padding:.5rem;
+    padding-right:1rem;
 }
 
 .notification_element_holder{
+    width:21rem;
     padding:.5rem;
     margin:.5rem;
     background:#6273a0;

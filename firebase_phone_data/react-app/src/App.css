@@ -19,11 +19,18 @@
     padding-right:1rem;
 }
 
+.notification_element textarea{
+    width:8.5rem;
+    height:3rem;
+}
+
+
 .notification_element_holder{
     width:21rem;
     padding:.5rem;
     margin:.5rem;
-    background:#6273a0;
+    background:#2149b3;
+    color: #f9f8f8;
   }
 
   .edit_holder{

@@ -158,7 +158,6 @@ function getShortId(long_id){
   const MAX_LENGTH=8;
   
   if( long_id.length>MAX_LENGTH ){
-    debugger
 
     short_id = long_id.split("").reduce((acc,cur,i,arr)=>{
       if(i<MAX_LENGTH){

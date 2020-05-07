@@ -1,7 +1,6 @@
 {
-    "short_name": "Notifications",
-    "name": "Update Notifications",
-    "description": "Update Notifications",
+    "background_color": "#3367D6",
+    "display": "minimal-ui",
     "icons": [
       {
         "src": "/notifications_manager/images/icon_192.png",
@@ -14,19 +13,20 @@
         "sizes": "512x512"
       }
     ],
-    "start_url": "/notifications_manager/?source=pwa",
-    "background_color": "#3367D6",
-    "display": "minimal-ui",
-    "scope": "/",
-    "theme_color": "#3367D6",
+    "name": "Update Notifications",
     "share_target": {
-        "action": "/notifications_manager",
-        "enctype":"application/x-www-form-urlencoded",
+        "action": "index.html",
         "method": "GET",
+        "enctype":"application/x-www-form-urlencoded",
         "params": {
             "title": "title",
             "text": "text",
             "url": "url"
-        }
-    }
+        },
+        "url_template": "index.html?oldapi=true&title={title}&text={text}&url={url}"
+    },
+    "short_name": "Notifications",
+    "start_url": "/notifications_manager/?source=pwa",
+    "theme_color": "#3367D6",
+    "description": "Update Notifications"
 }

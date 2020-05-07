@@ -1,5 +1,6 @@
 import {createStore} from 'redux'
 import {getDataValue} from '../functions/query.js'
+import {getQValue} from '../functions/query'
 
 import uuid from "uuid/v4"
 
@@ -9,7 +10,7 @@ function reducer(state=JSON.parse(initial_state_json), action){
     const new_state = JSON.parse(JSON.stringify(state));
     
     if( "GET_PHONE_JSON_ACTION"===action.type ){
-        new_state.phone = action.json;
+        new_state.phone = addQueryParamNotification(action.json);
         new_state.phone._notification_keys = {};
         for(let k in action.json.notifications){
             Object.keys(action.json.notifications[k]).forEach((cur,i,arr)=>{
@@ -22,10 +23,9 @@ function reducer(state=JSON.parse(initial_state_json), action){
     }else if( "SENT_UPDATE_NOTIFICATION"==action.type ){
         sendUpdateState(action.notification_id, new_state.phone.notifications[action.notification_id]);
     }else if( "DELETE_NOTIFICATION"===action.type ){
-        sendDelete(action.notification_id, new_state.phone.notifications[action.notification_id]);
+            sendDelete(action.notification_id, new_state.phone.notifications[action.notification_id]);
         delete new_state.phone.notifications[action.notification_id];
     }else if( "ADD_NOTIFICATION"===action.type ){
-        // sendDelete(action.notification_id, new_state.phone.notifications[action.notification_id]);
         const notification_id = uuid();
         new_state.phone.notifications[notification_id] = {};
         debugger
@@ -60,7 +60,11 @@ async function sendUpdateState(notification_id, notification_obj) {
         .catch(error => console.log('error', error));
 }
 
-async function sendDelete(notification_id){
+async function sendDelete(notification_id, notification_obj){
+
+    if(notification_obj.from_share===true){
+        return
+    }
 
     const person_id = getDataValue("person_id");
     const token = getDataValue("token");
@@ -129,6 +133,36 @@ const getPhoneJson = (()=>{
         
     };
 })();
+
+function addQueryParamNotification(phone_obj) {
+    let title = getQValue("title");
+    let text = getQValue("text");
+    let url = getQValue("url");
+
+    title = title!==undefined ? decodeURIComponent(title) : title;
+    text = text!==undefined ? decodeURIComponent(text) : text;
+    url = url!==undefined ? decodeURIComponent(url) : url;
+
+    if( title!==undefined || text!==undefined || url!==undefined ){
+        const id=uuid();
+
+        phone_obj.notifications[id] = {
+            from_share:true
+        };
+
+        if( title!==undefined ){
+            phone_obj.notifications[id].title = title;
+        }
+        if( text!==undefined ){
+            phone_obj.notifications[id].text = text;
+        }
+        if( url!==undefined ){
+            phone_obj.notifications[id].url = url;
+        }
+    }
+
+    return phone_obj;
+}
 
 const store = createStore(reducer, JSON.parse(initial_state_json), )
 

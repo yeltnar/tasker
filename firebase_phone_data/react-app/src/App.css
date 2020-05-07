@@ -27,6 +27,10 @@
     background:#2149b3;
     color: #f9f8f8;
   }
+.notification_element_holder.from_share{
+  background:#d8d42a;
+  color:black;
+}
 
   .add_notification_button{
       /* background-color: #6273a0; */
@@ -35,6 +39,7 @@
 
   .edit_holder{
     display:flex;
+    flex-wrap: wrap;
   }
 
   .submit_button{

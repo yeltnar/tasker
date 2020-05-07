@@ -15,7 +15,6 @@ function AppWrapper(){
     return <div>{str}</div>;
   }
 
-
   return <App/>;
 }
 
@@ -28,7 +27,6 @@ function App() {
   return (
     <Notifications></Notifications>
   );
-
 }
 
 function Notifications(){
@@ -46,7 +44,7 @@ function Notifications(){
 
   if( notification_keys===undefined ){
     setImmediate(async()=>{
-      await dispatch( await getPhoneJsonAction() );
+      dispatch( await getPhoneJsonAction() );
     })
     return null;
   }
@@ -95,8 +93,10 @@ function NotificationElementHolder(props){
     ele_arr.push( <NotificationElement key={k} label={k} content={single_notification_obj[k]||""} notification_id={notification_id} /> );
   }
 
+  const from_share_class = single_notification_obj.from_share===true ? "from_share" : "";
+
   return (
-    <div className="notification_element_holder">
+    <div className={`notification_element_holder ${from_share_class}`}>
       <div className="top_notification_container">
         <div>{single_notification_obj.title}  [{getShortId(notification_id)}]</div>
         <div><button onClick={deleteClick}>X</button></div>
@@ -129,6 +129,10 @@ function NotificationElementHolder(props){
 function NotificationElement(props){
   const dispatch = useDispatch();
   const {label,content,notification_id} = props;
+
+  if( label==="from_share" ){
+    return null;
+  }
 
   return(
     <div className="notification_element">

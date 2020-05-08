@@ -10,6 +10,8 @@ function reducer(state=JSON.parse(initial_state_json), action){
     const new_state = JSON.parse(JSON.stringify(state));
     
     if( "GET_PHONE_JSON_ACTION"===action.type ){
+        action.json = action.json===undefined||action.json===null ? {} : action.json; // if DB empty, fill it in
+        action.json.notifications = action.json.notifications===undefined ? {} : action.json.notifications; // if DB empty, fill it in
         new_state.phone = addQueryParamNotification(action.json);
         new_state.phone._notification_keys = {};
         // force title and text and have them be in this order
@@ -33,7 +35,6 @@ function reducer(state=JSON.parse(initial_state_json), action){
         const notification_id = uuid();
         new_state.phone.notifications[notification_id] = {};
         new_state.phone.notifications[notification_id].not_submitted = true;
-        debugger
     }
 
     return new_state;

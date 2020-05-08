@@ -12,6 +12,10 @@ function reducer(state=JSON.parse(initial_state_json), action){
     if( "GET_PHONE_JSON_ACTION"===action.type ){
         new_state.phone = addQueryParamNotification(action.json);
         new_state.phone._notification_keys = {};
+        // force title and text and have them be in this order
+        new_state.phone._notification_keys.title = "title";
+        new_state.phone._notification_keys.text = "text";
+        // make sure all keys are on all objects
         for(let k in action.json.notifications){
             Object.keys(action.json.notifications[k]).forEach((cur,i,arr)=>{
                 new_state.phone._notification_keys[cur] = cur;

@@ -28,6 +28,7 @@ function reducer(state=JSON.parse(initial_state_json), action){
     }else if( "ADD_NOTIFICATION"===action.type ){
         const notification_id = uuid();
         new_state.phone.notifications[notification_id] = {};
+        new_state.phone.notifications[notification_id].not_submitted = true;
         debugger
     }
 
@@ -47,7 +48,7 @@ async function sendUpdateState(notification_id, notification_obj) {
     const person_id = getDataValue("person_id");
     const token = getDataValue("token");
 
-    delete notification_obj.from_share;
+    delete notification_obj.not_submitted;
     
     const value = encodeURIComponent(JSON.stringify(notification_obj));
 
@@ -58,13 +59,12 @@ async function sendUpdateState(notification_id, notification_obj) {
 
     const fetch_res = await fetch(`https://node.andbrant.com/database?person_id=${person_id}&token=${token}&data_location=phone.notifications.${notification_id}&value=${value}`, requestOptions)
         .then(response => response.json())
-        // .then(result => console.log(result))
-        .catch(error => console.log('error', error));
+        .catch(error => alert('error', error));
 }
 
 async function sendDelete(notification_id, notification_obj){
 
-    if(notification_obj.from_share===true){
+    if(notification_obj.not_submitted===true){
         return
     }
 
@@ -149,7 +149,7 @@ function addQueryParamNotification(phone_obj) {
         const id=uuid();
 
         phone_obj.notifications[id] = {
-            from_share:true
+            not_submitted:true
         };
 
         if( title!==undefined ){

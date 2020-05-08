@@ -27,7 +27,7 @@
     background:#2149b3;
     color: #f9f8f8;
   }
-.notification_element_holder.from_share{
+.notification_element_holder.not_submitted{
   background:#d8d42a;
   color:black;
 }

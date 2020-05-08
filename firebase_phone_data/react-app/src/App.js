@@ -93,10 +93,10 @@ function NotificationElementHolder(props){
     ele_arr.push( <NotificationElement key={k} label={k} content={single_notification_obj[k]||""} notification_id={notification_id} /> );
   }
 
-  const from_share_class = single_notification_obj.from_share===true ? "from_share" : "";
+  const not_submitted_class = single_notification_obj.not_submitted===true ? "not_submitted" : "";
 
   return (
-    <div className={`notification_element_holder ${from_share_class}`}>
+    <div className={`notification_element_holder ${not_submitted_class}`}>
       <div className="top_notification_container">
         <div>{single_notification_obj.title}  [{getShortId(notification_id)}]</div>
         <div><button onClick={deleteClick}>X</button></div>
@@ -112,10 +112,11 @@ function NotificationElementHolder(props){
     </div>
   );
 
-  function submit(){
+  async function submit(){
     dispatch(submitNotificationUpdate(notification_id));
     setSubmitText("Submitted!");
-    setTimeout(()=>{setSubmitText("Submit");},2000);
+    await (new Promise((resolve,reject)=>{setTimeout(()=>{resolve()},2000);}));
+    setSubmitText("Submit");
   }
 
   function deleteClick(){
@@ -130,7 +131,7 @@ function NotificationElement(props){
   const dispatch = useDispatch();
   const {label,content,notification_id} = props;
 
-  if( label==="from_share" ){
+  if( label==="not_submitted" ){
     return null;
   }
 

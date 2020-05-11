@@ -61,8 +61,15 @@
  })()
  
  function getActionJSON(){
-    var json_str = latest_data===""||latest_data===undefined ? "{}" : latest_data;
-    return JSON.parse(json_str);
+    let json_str = latest_data===""||latest_data===undefined ? "{}" : latest_data;
+    json_str = json_str.split("\n").join(" ")
+    let to_return;
+    try{
+        to_return = JSON.parse(json_str);
+    }catch(e){
+        throw e;
+    }
+    return to_return;
  }
  
  function getCurrentJSON(){

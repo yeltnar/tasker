@@ -4,7 +4,9 @@ import {getQValue} from '../functions/query'
 
 import uuid from "uuid/v4"
 
-const initial_state_json = JSON.stringify({});
+const initial_state_json = JSON.stringify({
+    _saved:{}
+});
 
 function reducer(state=JSON.parse(initial_state_json), action){
     const new_state = JSON.parse(JSON.stringify(state));
@@ -25,7 +27,16 @@ function reducer(state=JSON.parse(initial_state_json), action){
         }
     }else if( "UPDATE_NOTIFICATION_VALUE"===action.type ){
         const {label,content,notification_id} = action;
+
+        new_state._saved.phone = new_state._saved.phone===undefined?{}:new_state._saved.phone;
+        new_state._saved.phone.notifications = new_state._saved.phone.notifications===undefined?{}:new_state._saved.phone.notifications;
+
+        if( new_state._saved.phone.notifications[notification_id]===undefined ){
+            new_state._saved.phone.notifications[notification_id] = {...new_state.phone.notifications[notification_id]};
+        }
+
         new_state.phone.notifications[notification_id][label] = content;
+
     }else if( "SENT_UPDATE_NOTIFICATION"==action.type ){
         sendUpdateState(action.notification_id, new_state.phone.notifications[action.notification_id]);
     }else if( "DELETE_NOTIFICATION"===action.type ){
@@ -55,7 +66,8 @@ async function sendUpdateState(notification_id, notification_obj) {
 
     delete notification_obj.not_submitted;
     
-    const value = encodeURIComponent(JSON.stringify(notification_obj));
+    const json_value = JSON.stringify(notification_obj);
+    const value = encodeURIComponent(json_value);
 
     var requestOptions = {
         method: 'POST',

@@ -75,6 +75,31 @@ function NotificationElementHolder(props){
     }
   });
 
+  const different_from_saved = useSelector((state)=>{
+    if( notification_id===undefined || 
+        state===undefined || 
+        state._saved===undefined || 
+        state._saved.phone===undefined || 
+        state._saved.phone.notifications===undefined || 
+        state._saved.phone.notifications[notification_id]===undefined ||
+        state===undefined || 
+        state.phone===undefined || 
+        state.phone.notifications===undefined || 
+        state.phone.notifications[notification_id]===undefined 
+    ){
+      return false;
+    }else{
+      // state._saved.phone.notifications[notification_id]
+      let to_return = false;
+      for( let k in state.phone.notifications[notification_id] ){
+        if( state.phone.notifications[notification_id][k] !== state._saved.phone.notifications[notification_id][k] ){
+          to_return = true;
+        }
+      }
+      return to_return;
+    }
+  });
+
   const _notification_keys = useSelector( state=>{
     if( notification_id===undefined || state===undefined || state.phone===undefined || state.phone._notification_keys===undefined ){
       return undefined;
@@ -90,10 +115,10 @@ function NotificationElementHolder(props){
 
   const ele_arr = [];
   for( let k in _notification_keys ){
-    ele_arr.push( <NotificationElement key={k} label={k} content={single_notification_obj[k]||""} notification_id={notification_id} /> );
+    ele_arr.push( <NotificationElement different_from_saved={different_from_saved} key={k} label={k} content={single_notification_obj[k]||""} notification_id={notification_id} /> );
   }
 
-  const not_submitted_class = single_notification_obj.not_submitted===true ? "not_submitted" : "";
+  const not_submitted_class = single_notification_obj.not_submitted===true||different_from_saved===true ? "not_submitted" : "";
 
   return (
     <div className={`notification_element_holder ${not_submitted_class}`}>
@@ -129,7 +154,7 @@ function NotificationElementHolder(props){
 
 function NotificationElement(props){
   const dispatch = useDispatch();
-  const {label,content,notification_id} = props;
+  const {label,content,notification_id, different_from_saved} = props;
 
   if( label==="not_submitted" ){
     return null;
@@ -143,8 +168,7 @@ function NotificationElement(props){
   )
 
   function onChange(event){
-    console.log()
-    dispatch(updateNotificationValue( {label,content:event.target.value,notification_id} ));
+    dispatch(updateNotificationValue( {label, content:event.target.value, notification_id} ));
   }
 }
 

@@ -1,0 +1,81 @@
+<!-- This work is licensed under the W3C Software and Document License
+     (http://www.w3.org/Consortium/Legal/2015/copyright-software-and-document).
+  -->
+<html lang="en">
+<head>
+  <link rel="manifest" href="set_wallpaper/manifest.json">
+  <title>Web Share Target Test App</title>
+  <link rel="shortcut icon" type="image/png" href="set_wallpaper/images/favicon.ico" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#111111" />
+  <style>
+    .error {
+      color: #d22;
+    }
+  </style>
+</head>
+<body>
+  <div id="url_spot">loading url</div>
+  <div id="report_spot"></div>
+  <script>
+    'use strict';
+
+    function setPhoneWallpaper(wallpaper_url){
+
+      const local_storage_pre_str = "_app_data_";
+
+      const person_id = getQueryParam("person_id") || localStorage.getItem(`${local_storage_pre_str}person_id`);
+      const token = getQueryParam("token") || localStorage.getItem(`${local_storage_pre_str}token`);
+
+      // save if set
+      if( person_id!==undefined && person_id!==null ){
+        localStorage.setItem(`${local_storage_pre_str}person_id`, person_id);
+      }
+      if( token!==undefined && token!==null ){
+        localStorage.setItem(`${local_storage_pre_str}token`, token);
+      }
+
+      var requestOptions = {
+        method: 'POST',
+        redirect: 'follow'
+      };
+
+      fetch(`https://node.andbrant.com/database?person_id=${person_id}&token=${token}&data_location=phone.wallpaper.current_wallpaper&value=${wallpaper_url}`, requestOptions)
+        .then(response => response.json())
+        .then(result => {
+          console.log(result)
+          document.querySelector("#report_spot").innerText = result;
+        })
+        .catch(error => console.log('error', error));
+
+    }
+
+    function getWallpaperQueryParams() {
+      const title = getQueryParam("title")
+      const text = getQueryParam("text")
+      const url = getQueryParam("url")
+
+      return {
+        title,
+        text,
+        url,
+      }
+    }
+
+    function getQueryParam(str){
+      var parsedUrl = new URL(window.location.toString());
+      return parsedUrl.searchParams.get(str);
+    }
+
+    function onLoad(){
+      const {title,text,url} = getWallpaperQueryParams();
+      const wallpaper_url = url || text;
+      document.querySelector("#url_spot").innerText = wallpaper_url||"no url found";
+      setPhoneWallpaper(wallpaper_url);
+    }
+
+    onLoad();
+
+  </script>
+</body>
+</html>

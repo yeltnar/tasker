@@ -1,0 +1,1 @@
+cp -r * /keybase/public/droodle_b/set_wallpaper/

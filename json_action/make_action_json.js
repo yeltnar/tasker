@@ -12,53 +12,61 @@
     // flash("3"+JSON.stringify(all_keys))
     
     const action_obj = all_keys.reduce((acc,cur_key,i,arr)=>{
-        if( latest_json[cur_key] === undefined ){
-            // need to delete
-            acc[cur_key] = {
-                title: current_json[cur_key].title,
-                text: current_json[cur_key].text,
-                delete: true,
-            };
-        }else if( latest_json[cur_key] !== undefined ){
 
-            // TODO check if the title for the key has changed
-            if( current_json[cur_key]!==undefined && latest_json[cur_key].title !== current_json[cur_key].title ){
-                const rand_id = (Math.random()+"").split("0.").join("");
+        // check if it hasn't changed
+        const current_notification_obj_keys = Object.keys({ ...latest_json[cur_key], ...current_json[cur_key] });
+        let need_to_update = false;
+        
+        current_notification_obj_keys.forEach((cur,small_i,arr)=>{
 
-                acc[rand_id] = {
+            if( latest_json[cur_key]===undefined){
+                need_to_update=true;
+            }else if( current_json[cur_key]===undefined ){
+                need_to_update=true;
+            }else if( latest_json[cur_key][cur]!==current_json[cur_key][cur] ){
+                need_to_update=true;
+            }
+        });
+
+        if(need_to_update) {
+
+            if (latest_json[cur_key] === undefined) {
+                // need to delete
+                acc[cur_key] = {
                     title: current_json[cur_key].title,
                     text: current_json[cur_key].text,
                     delete: true,
                 };
-            }
+            } else if (latest_json[cur_key] !== undefined) {
 
-            if(latest_json[cur_key].show===false  ){
-                acc[cur_key] = {
-                    title: latest_json[cur_key].title,
-                    text: latest_json[cur_key].text,
-                    delete: true
-                };
-            }else if( latest_json[cur_key].title!==undefined ){
-                // need to add
-                const text = latest_json[cur_key].text || "";
-                acc[cur_key] = {
-                    title: latest_json[cur_key].title,
-                    text: text,
-                };
-            }else{
-                acc[cur_key] = {
-                    title: latest_json[cur_key].title,
-                    text: latest_json[cur_key].text,
-                    delete: true
-                };
+                if (latest_json[cur_key].show === false) {
+                    acc[cur_key] = {
+                        // title: latest_json[cur_key].title,
+                        // text: latest_json[cur_key].text,
+                        title: "DELETE IT",
+                        text: "DELETE IT",
+                        delete: true
+                    };
+                } else if (latest_json[cur_key].title !== undefined) {
+                    // need to add
+                    const text = latest_json[cur_key].text || "";
+                    acc[cur_key] = {
+                        title: latest_json[cur_key].title,
+                        text: text,
+                    };
+                } else {
+                    acc[cur_key] = {
+                        title: latest_json[cur_key].title,
+                        text: latest_json[cur_key].text,
+                        delete: true
+                    };
+                }
+
             }
 
         }
         return acc;
     },{});
-
-    // flash(JSON.stringify(action_obj,null,2))
-    // flash()
 
     setLocal("action_json", JSON.stringify(action_obj,null,2))
  

@@ -55,6 +55,7 @@ function reducer(state=JSON.parse(initial_state_json), action){
     }else if( "ADD_NOTIFICATION"===action.type ){
         const notification_id = uuid();
         new_state.phone.notifications[notification_id] = {};
+        new_state.phone.notifications[notification_id].show = true;
         new_state.phone.notifications[notification_id].not_submitted = true;
     }
 

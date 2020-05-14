@@ -65,14 +65,7 @@
     function getQueryParam(str){
       const parsedUrl = new URL(window.location.toString());
       const param = parsedUrl.searchParams.get(str);
-
-      let to_return = param;
-
-      if( typeof to_return==="string" ){
-        to_return = param.split("+").join(" ")
-      }
-        
-      return to_return;
+      return param;
     }
 
     async function onLoad(){

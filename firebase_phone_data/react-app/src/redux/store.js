@@ -166,6 +166,9 @@ function addQueryParamNotification(phone_obj) {
     text = text!==undefined ? decodeURIComponent(text) : text;
     url = url!==undefined ? decodeURIComponent(url) : url;
 
+    title = title.split("+").join(" ");
+    text = text.split("+").join(" ");
+
     if( title!==undefined || text!==undefined || url!==undefined ){
         const id=uuid();
 

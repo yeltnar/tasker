@@ -38,7 +38,11 @@ function reducer(state=JSON.parse(initial_state_json), action){
         new_state.phone.notifications[notification_id][label] = content;
 
     }else if( "SENT_UPDATE_NOTIFICATION"==action.type ){
-        sendUpdateState(action.notification_id, new_state.phone.notifications[action.notification_id]);
+        const {notification_id} = action;
+        new_state._saved.phone = new_state._saved.phone===undefined?{}:new_state._saved.phone;
+        new_state._saved.phone.notifications = new_state._saved.phone.notifications===undefined?{}:new_state._saved.phone.notifications;
+        new_state._saved.phone.notifications[notification_id] = undefined;
+        sendUpdateState(notification_id, new_state.phone.notifications[notification_id]);
     }else if( "DELETE_NOTIFICATION"===action.type ){
             sendDelete(action.notification_id, new_state.phone.notifications[action.notification_id]);
         delete new_state.phone.notifications[action.notification_id];

@@ -61,12 +61,13 @@
  })()
  
  function getActionJSON(){
-    let json_str = latest_data===""||latest_data===undefined ? "{}" : latest_data;
-    json_str = json_str.split("\n").join(" ")
+    var json_str = latest_data===""||latest_data===undefined ? "{}" : latest_data;
     let to_return;
+    json_str = json_str.split("\n").join(" ");
     try{
         to_return = JSON.parse(json_str);
     }catch(e){
+        flashLong(`JSON Parse issue in getActionJSON`);
         throw e;
     }
     return to_return;
@@ -80,6 +81,14 @@
         real_current_data = "";
      }
     var json_str = real_current_data===""||real_current_data===undefined ? "{}" : real_current_data;
-    return JSON.parse(json_str);
+    json_str = json_str.split("\n").join(" ");
+    let to_return;
+    try{
+        to_return = JSON.parse(json_str)
+    }catch(e){
+        flashLong(`JSON Parse issue in getCurrentJSON`);
+        throw e;
+    }
+    return to_return;
  }
  

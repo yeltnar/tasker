@@ -20,7 +20,7 @@
   <script>
     'use strict';
 
-    function setPhoneWallpaper(wallpaper_url){
+    async function setPhoneWallpaper(wallpaper_url){
 
       const local_storage_pre_str = "_app_data_";
 
@@ -40,7 +40,7 @@
         redirect: 'follow'
       };
 
-      fetch(`https://node.andbrant.com/database?person_id=${person_id}&token=${token}&data_location=phone.wallpaper.current_wallpaper&value=${wallpaper_url}`, requestOptions)
+      await fetch(`https://node.andbrant.com/database?person_id=${person_id}&token=${token}&data_location=phone.wallpaper.current_wallpaper&value=${wallpaper_url}`, requestOptions)
         .then(response => response.json())
         .then(result => {
           console.log(result)
@@ -63,15 +63,29 @@
     }
 
     function getQueryParam(str){
-      var parsedUrl = new URL(window.location.toString());
-      return parsedUrl.searchParams.get(str);
+      const parsedUrl = new URL(window.location.toString());
+      const param = parsedUrl.searchParams.get(str);
+
+      let to_return = param;
+
+      if( typeof to_return==="string" ){
+        to_return = param.split("+").join(" ")
+      }
+        
+      return to_return;
     }
 
-    function onLoad(){
+    async function onLoad(){
       const {title,text,url} = getWallpaperQueryParams();
       const wallpaper_url = url || text;
       document.querySelector("#url_spot").innerText = wallpaper_url||"no url found";
-      setPhoneWallpaper(wallpaper_url);
+      await setPhoneWallpaper(wallpaper_url);
+
+      if( typeof wallpaper_url==="string" ){
+        setTimeout(()=>{
+          window.close();
+        },1000);
+      }
     }
 
     onLoad();

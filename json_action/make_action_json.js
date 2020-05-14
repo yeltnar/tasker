@@ -32,7 +32,13 @@
                 };
             }
 
-            if( latest_json[cur_key].title!==undefined ){
+            if(latest_json[cur_key].show===false  ){
+                acc[cur_key] = {
+                    title: latest_json[cur_key].title,
+                    text: latest_json[cur_key].text,
+                    delete: true
+                };
+            }else if( latest_json[cur_key].title!==undefined ){
                 // need to add
                 const text = latest_json[cur_key].text || "";
                 acc[cur_key] = {

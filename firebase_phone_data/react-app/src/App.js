@@ -160,15 +160,30 @@ function NotificationElement(props){
     return null;
   }
 
-  return(
-    <div className="notification_element">
-      <div>{label}</div>
-      <textarea value={content} onChange={onChange}></textarea>
-    </div>
-  )
+  if(label==="show"){
+    return(
+      <div className="notification_element">
+        <div>{label}</div>
+        <input type="checkbox" checked={content} onChange={onChange}></input>
+      </div>
+    )
+  }else{
+    return(
+      <div className="notification_element">
+        <div>{label}</div>
+        <textarea value={content} onChange={onChange}></textarea>
+      </div>
+    )
+  }
 
   function onChange(event){
-    dispatch(updateNotificationValue( {label, content:event.target.value, notification_id} ));
+    let redux_event;
+    if(label==="show"){
+      redux_event = updateNotificationValue( {label, content:event.target.checked, notification_id} );
+    }else{
+      redux_event = updateNotificationValue( {label, content:event.target.value, notification_id} );
+    }
+    dispatch(redux_event);
   }
 }
 

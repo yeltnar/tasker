@@ -14,6 +14,12 @@ function reducer(state=JSON.parse(initial_state_json), action){
     if( "GET_PHONE_JSON_ACTION"===action.type ){
         action.json = action.json===undefined||action.json===null ? {} : action.json; // if DB empty, fill it in
         action.json.notifications = action.json.notifications===undefined ? {} : action.json.notifications; // if DB empty, fill it in
+        
+        // if don't have show value, make it true
+        for(let k in action.json.notifications){
+            action.json.notifications[k].show = action.json.notifications[k].show===undefined?true:action.json.notifications[k].show;
+        }
+
         new_state.phone = addQueryParamNotification(action.json);
         new_state.phone._notification_keys = {};
         // force title and text and have them be in this order
@@ -166,8 +172,8 @@ function addQueryParamNotification(phone_obj) {
     text = text!==undefined ? decodeURIComponent(text) : text;
     url = url!==undefined ? decodeURIComponent(url) : url;
 
-    title = title.split("+").join(" ");
-    // text = text.split("+").join(" ");
+    title = title===undefined ? title : title.split("+").join(" ");
+    // text = text===undefined ? text : text.split("+").join(" ");
 
     if( title!==undefined || text!==undefined || url!==undefined ){
         const id=uuid();
@@ -185,6 +191,8 @@ function addQueryParamNotification(phone_obj) {
         if( url!==undefined ){
             phone_obj.notifications[id].url = url;
         }
+
+        phone_obj.notifications[id].show = true;
     }
 
     return phone_obj;

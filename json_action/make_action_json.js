@@ -77,11 +77,12 @@
  function getActionJSON(){
     var json_str = latest_data===""||latest_data===undefined ? "{}" : latest_data;
     let to_return;
-    json_str = json_str.split("\n").join(" ");
+    json_str = fixJsonString(json_str);
     try{
         to_return = JSON.parse(json_str);
     }catch(e){
         flashLong(`JSON Parse issue in getActionJSON`);
+        setClip(json_str);
         throw e;
     }
     return to_return;
@@ -95,14 +96,20 @@
         real_current_data = "";
      }
     var json_str = real_current_data===""||real_current_data===undefined ? "{}" : real_current_data;
-    json_str = json_str.split("\n").join(" ");
+    json_str = fixJsonString(json_str);
     let to_return;
     try{
         to_return = JSON.parse(json_str)
     }catch(e){
         flashLong(`JSON Parse issue in getCurrentJSON`);
+        setClip(json_str);
         throw e;
     }
     return to_return;
+ }
+
+ function fixJsonString(json_str){
+    const break_str = "<br/>";
+    return json_str.split(/\n/).join(break_str).split(new RegExp(break_str+"$")).join("");
  }
  

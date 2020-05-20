@@ -53,10 +53,19 @@ function reducer(state=JSON.parse(initial_state_json), action){
             sendDelete(action.notification_id, new_state.phone.notifications[action.notification_id]);
         delete new_state.phone.notifications[action.notification_id];
     }else if( "ADD_NOTIFICATION"===action.type ){
+        // debugger
         const notification_id = uuid();
-        new_state.phone.notifications[notification_id] = {};
-        new_state.phone.notifications[notification_id].show = true;
-        new_state.phone.notifications[notification_id].not_submitted = true;
+        const {data} = action;
+        const notification_obj={}
+
+        for( let k in data ){
+            notification_obj[k] = data[k];
+        }
+
+        notification_obj.show = notification_obj.show===undefined ? true : notification_obj.show;
+        notification_obj.not_submitted = notification_obj.not_submitted===undefined ? true : notification_obj.not_submitted;
+
+        new_state.phone.notifications[notification_id] = notification_obj;
     }
 
     return new_state;
@@ -136,9 +145,10 @@ function deleteNotification(notification_id){
     }
 }
 
-function addNotification(){ 
+function addNotification(data){ 
     return {
         type: "ADD_NOTIFICATION",
+        data,
     }
 }
 

@@ -15,6 +15,19 @@ function AppWrapper(){
     return <div>{str}</div>;
   }
 
+  window.addEventListener("load",()=>{
+    too_many_loops();
+
+    function too_many_loops(){
+      const add_notification_button = document.querySelector(".add_notification_button")
+      if( add_notification_button===null || add_notification_button===undefined ){
+        setTimeout(too_many_loops,100);
+      }else{
+        add_notification_button.scrollIntoView();
+      }
+    }
+  })
+
   return <App/>;
 }
 

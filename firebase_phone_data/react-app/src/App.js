@@ -38,8 +38,18 @@ function App() {
   // const val = JSON.stringify(phone_json,null,2);
 
   return (
-    <Notifications></Notifications>
+    <div id="app">
+      <TopBar></TopBar>
+      <Notifications></Notifications>
+    </div>
   );
+}
+
+function TopBar(){
+  return (<div id="TopBar">
+    <div>Filter Tag</div>
+    <input type="text"></input>
+  </div>);
 }
 
 function Notifications(){
@@ -67,8 +77,10 @@ function Notifications(){
   });
 
   return <div className="notifications">
-    {notification_element_holders_arr}
-    <AddNotificationButton/>
+    <div className="notifications_scroll_wrapper">
+      {notification_element_holders_arr}
+      <AddNotificationButton/>
+    </div>
   </div>
 
 }

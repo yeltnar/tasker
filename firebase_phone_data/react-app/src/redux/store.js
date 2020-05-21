@@ -25,6 +25,7 @@ function reducer(state=JSON.parse(initial_state_json), action){
         // force title and text and have them be in this order
         new_state.phone._notification_keys.title = "title";
         new_state.phone._notification_keys.text = "text";
+        new_state.phone._notification_keys.tag = "tag";
         // make sure all keys are on all objects
         for(let k in action.json.notifications){
             Object.keys(action.json.notifications[k]).forEach((cur,i,arr)=>{

@@ -17,7 +17,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
 
-    "keybase_deploy":"rm -rf /keybase/public/droodle_b/notifications_manager && npm run build && mkdir /keybase/public/droodle_b/notifications_manager && cp -r build/* /keybase/public/droodle_b/notifications_manager"
+    "keybase_deploy":"rm -rf /keybase/public/droodle_b/notifications_manager && npm run build && mkdir /keybase/public/droodle_b/notifications_manager && cp -r build/* /keybase/public/droodle_b/notifications_manager && node -e 'const uuid=require(`uuid/v4`); console.log(uuid());' > /keybase/public/droodle_b/notifications_manager/uuid.txt"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -36,8 +36,6 @@ body{
 .notifications{
     /* height: calc( 100% - var(--top_bar_height) ); */
     height:auto;
-    display:flex;
-    flex-wrap:wrap;
     --app_padding:.5rem;
     /* padding: 0px; */
     padding: var(--app_padding);
@@ -46,6 +44,9 @@ body{
   }
 
 .notifications_scroll_wrapper{
+  width: 100%;
+  display:flex;
+  flex-wrap:wrap;
 
 }
 

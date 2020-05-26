@@ -5,7 +5,10 @@ import {getQValue} from '../functions/query'
 import uuid from "uuid/v4"
 
 const initial_state_json = JSON.stringify({
-    _saved:{}
+    _saved:{},
+    filter:{
+        text:""
+    },
 });
 
 function reducer(state=JSON.parse(initial_state_json), action){
@@ -67,6 +70,25 @@ function reducer(state=JSON.parse(initial_state_json), action){
         notification_obj.not_submitted = notification_obj.not_submitted===undefined ? true : notification_obj.not_submitted;
 
         new_state.phone.notifications[notification_id] = notification_obj;
+    }else if( "SET_FILTER_CHANGE_EVENT"===action.type ){
+        new_state.filter.text = action.text_value;
+
+        try{
+            if( new_state.filter.text.split("/").length >= 3  ){
+                
+                const remove_first_slash = /\/(.*)/.exec(new_state.filter.text)[1];
+                const remove_second_slash = /(.*)\/([^/]*)/.exec(remove_first_slash);
+
+                const text = remove_second_slash[1];
+                const flags = remove_second_slash[2];
+
+                new_state.filter.regex = new RegExp( text, flags );
+            }else{
+                throw new Error("Not a regex");
+            }
+        }catch(e){
+            new_state.filter.regex = undefined;
+        }
     }
 
     return new_state;
@@ -153,6 +175,13 @@ function addNotification(data){
     }
 }
 
+function setFilterChangeEvent(text_value){ 
+    return {
+        type: "SET_FILTER_CHANGE_EVENT",
+        text_value,
+    }
+}
+
 const getPhoneJson = (()=>{
     let pending_promise;;
     return ()=>{
@@ -219,4 +248,5 @@ export {
     submitNotificationUpdate,
     deleteNotification,
     addNotification,
+    setFilterChangeEvent,
 };

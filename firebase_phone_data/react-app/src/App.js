@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import './App.css';
 import { useSelector, useDispatch } from 'react-redux';
-import {getPhoneJsonAction,updateNotificationValue,submitNotificationUpdate,deleteNotification,addNotification} from "./redux/store"
 import {getDataValue} from './functions/query'
+import {
+  getPhoneJsonAction,
+  updateNotificationValue,
+  submitNotificationUpdate,
+  deleteNotification,
+  addNotification,
+  setFilterChangeEvent
+} from "./redux/store"
 
 function AppWrapper(){
 
@@ -46,21 +53,70 @@ function App() {
 }
 
 function TopBar(){
+  const dispatch = useDispatch();
+
+  const top_bar_value = useSelector((state)=>{
+    return state.filter.text;
+  });
+
   return (<div id="TopBar">
     <div>Filter Tag</div>
-    <input type="text"></input>
+    <input onChange={onFilterChange} type="text" value={top_bar_value}></input>
   </div>);
+
+  function onFilterChange(e){
+    dispatch(setFilterChangeEvent(e.target.value))
+  }
 }
 
 function Notifications(){
 
   const dispatch = useDispatch();
 
+  const filter_obj = useSelector((state)=>{
+    return state.filter;
+  });
+
   const notification_keys = useSelector((state)=>{
     if( state===undefined || state.phone===undefined || state.phone.notifications===undefined ){
       return undefined;
     }else{   
-      const notification_keys = Object.keys(state.phone.notifications);
+
+      // TODO filter on search
+
+      const keys = Object.keys(state.phone.notifications)
+
+      const matched_keys = keys.reduce((acc,cur)=>{
+
+        const cur_obj = state.phone.notifications[cur];
+
+        let passed = false;
+
+        if( filter_obj.text==="" || filter_obj.text===undefined ){
+          passed = true;
+        }else if( filter_obj.regex!==undefined ){
+            passed = 
+              filter_obj.regex.test( cur_obj.title ) || 
+              filter_obj.regex.test( cur_obj.text ) || 
+              filter_obj.regex.test( cur_obj.tag );
+        }else{
+          const plain_check_regex = new RegExp( filter_obj.text, "i" );
+
+          passed = 
+              plain_check_regex.test( cur_obj.title ) || 
+              plain_check_regex.test( cur_obj.text ) || 
+              plain_check_regex.test( cur_obj.tag );
+        }
+
+        if( passed ){
+          acc.push(cur);
+        }
+
+        return acc;
+
+      },[]);
+
+      const notification_keys = matched_keys;
       return notification_keys;
     }
   });

@@ -25,6 +25,8 @@
                 need_to_update=true;
             }else if( latest_json[cur_key][cur]!==current_json[cur_key][cur] ){
                 need_to_update=true;
+            }else{ // added this so it will always update all them 
+                need_to_update=true;
             }
         });
 

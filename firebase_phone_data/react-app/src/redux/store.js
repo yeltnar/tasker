@@ -89,6 +89,8 @@ function reducer(state=JSON.parse(initial_state_json), action){
         }catch(e){
             new_state.filter.regex = undefined;
         }
+    }else if( "SET_FILTER_CHECK_CHANGE_EVENT"===action.type ){
+        new_state.filter.checked=action.bool_value;
     }
 
     return new_state;
@@ -182,6 +184,13 @@ function setFilterChangeEvent(text_value){
     }
 }
 
+function setFilterCheckChangeEvent(bool_value){ 
+    return {
+        type: "SET_FILTER_CHECK_CHANGE_EVENT",
+        bool_value,
+    }
+}
+
 const getPhoneJson = (()=>{
     let pending_promise;;
     return ()=>{
@@ -249,4 +258,5 @@ export {
     deleteNotification,
     addNotification,
     setFilterChangeEvent,
+    setFilterCheckChangeEvent,
 };

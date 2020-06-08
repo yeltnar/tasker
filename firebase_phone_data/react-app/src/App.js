@@ -8,7 +8,8 @@ import {
   submitNotificationUpdate,
   deleteNotification,
   addNotification,
-  setFilterChangeEvent
+  setFilterChangeEvent,
+  setFilterCheckChangeEvent
 } from "./redux/store"
 
 function AppWrapper(){
@@ -62,10 +63,16 @@ function TopBar(){
   return (<div id="TopBar">
     <div>Filter Tag</div>
     <input onChange={onFilterChange} type="text" value={top_bar_value}></input>
+    <div>Shown</div>
+    <input onChange={onFilterChange} type="checkbox" value={top_bar_value}></input>
   </div>);
 
   function onFilterChange(e){
-    dispatch(setFilterChangeEvent(e.target.value))
+    if( e.target.getAttribute("type")==="checkbox" ){
+      dispatch(setFilterCheckChangeEvent(e.target.checked))
+    }else{
+      dispatch(setFilterChangeEvent(e.target.value))
+    }
   }
 }
 
@@ -86,7 +93,7 @@ function Notifications(){
 
       const keys = Object.keys(state.phone.notifications)
 
-      const matched_keys = keys.reduce((acc,cur)=>{
+      let matched_keys = keys.reduce((acc,cur)=>{
 
         const cur_obj = state.phone.notifications[cur];
 
@@ -114,7 +121,46 @@ function Notifications(){
 
         return acc;
 
+      },[]).reduce((acc,cur)=>{
+        
+        const cur_obj = state.phone.notifications[cur];
+        let passed = false;
+
+        if( filter_obj.checked===undefined ){
+          passed=true;
+        }else if( filter_obj.checked===false ){
+          passed=true;
+        }else if( filter_obj.checked===true && cur_obj.show===true ){
+          passed=true;
+        }
+
+        if( passed ){
+          acc.push(cur);
+        }
+
+        return acc;
+
       },[]);
+
+      const unsaved_keys = keys.reduce((acc,cur)=>{
+        // add back not saved
+        const cur_obj = state.phone.notifications[cur];
+        let not_submitted = false;
+        
+        if( cur_obj.not_submitted===true ){
+          not_submitted = true;
+        }
+
+        const different_from_saved = getDifferentFromSaved(state, cur);
+
+        if( !matched_keys.includes(cur) && (not_submitted || different_from_saved) ){
+          acc.push(cur);
+        }
+
+        return acc;
+      },[])
+      
+      matched_keys = matched_keys.concat(unsaved_keys);
 
       const notification_keys = matched_keys;
       return notification_keys;
@@ -157,28 +203,7 @@ function NotificationElementHolder(props){
   });
 
   const different_from_saved = useSelector((state)=>{
-    if( notification_id===undefined || 
-        state===undefined || 
-        state._saved===undefined || 
-        state._saved.phone===undefined || 
-        state._saved.phone.notifications===undefined || 
-        state._saved.phone.notifications[notification_id]===undefined ||
-        state===undefined || 
-        state.phone===undefined || 
-        state.phone.notifications===undefined || 
-        state.phone.notifications[notification_id]===undefined 
-    ){
-      return false;
-    }else{
-      // state._saved.phone.notifications[notification_id]
-      let to_return = false;
-      for( let k in state.phone.notifications[notification_id] ){
-        if( state.phone.notifications[notification_id][k] !== state._saved.phone.notifications[notification_id][k] ){
-          to_return = true;
-        }
-      }
-      return to_return;
-    }
+    return getDifferentFromSaved(state, notification_id);
   });
 
   const _notification_keys = useSelector( state=>{
@@ -297,6 +322,31 @@ function getShortId(long_id){
   }
 
   return short_id
+}
+
+function getDifferentFromSaved(state, notification_id) {
+  if (notification_id === undefined ||
+    state === undefined ||
+    state._saved === undefined ||
+    state._saved.phone === undefined ||
+    state._saved.phone.notifications === undefined ||
+    state._saved.phone.notifications[notification_id] === undefined ||
+    state === undefined ||
+    state.phone === undefined ||
+    state.phone.notifications === undefined ||
+    state.phone.notifications[notification_id] === undefined
+  ) {
+    return false;
+  } else {
+    // state._saved.phone.notifications[notification_id]
+    let to_return = false;
+    for (let k in state.phone.notifications[notification_id]) {
+      if (state.phone.notifications[notification_id][k] !== state._saved.phone.notifications[notification_id][k]) {
+        to_return = true;
+      }
+    }
+    return to_return;
+  }
 }
 
 export default AppWrapper;

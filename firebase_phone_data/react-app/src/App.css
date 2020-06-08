@@ -25,11 +25,12 @@ body{
   display: flex;
   color: var(--drew_white);
   z-index: 5;
+  align-items: center;
 }
 #TopBar > *{
   margin: .25rem .5rem .25rem .5rem;
 }
-#TopBar > input{
+#TopBar > input[type="text"]{
   height: 1rem;
 }
 
